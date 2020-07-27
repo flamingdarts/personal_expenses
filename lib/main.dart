@@ -31,6 +31,8 @@ class MyHomePage extends StatelessWidget {
     ),
   ];
 
+  final titleConroller = TextEditingController();
+  final amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,12 +57,17 @@ class MyHomePage extends StatelessWidget {
                 children: <Widget>[
                   TextField(
                     decoration: InputDecoration(labelText: "Title"),
+                    controller: titleConroller,
                   ),
                   TextField(
                     decoration: InputDecoration(labelText: "Amount"),
+                    controller: amountController,
                   ),
                   FlatButton(
-                    onPressed: () => {print('Button pressed!')},
+                    onPressed: () => {
+                      print(titleConroller.text),
+                      print(amountController.text)
+                    },
                     child: Text(
                       'Add Transaction',
                       style: TextStyle(
