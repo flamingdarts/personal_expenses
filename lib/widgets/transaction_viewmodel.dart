@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import '../widgets/new_transactions.dart';
-import '../widgets/transaction_list.dart';
+import 'new_transactions.dart';
+import 'transaction_list.dart';
 import '../models/transaction.dart';
 
-class UserTransactions extends StatefulWidget {
+class TransactionViewModel extends StatefulWidget {
   @override
-  _UserTransactionsState createState() => _UserTransactionsState();
+  _TransactionViewModelState createState() => _TransactionViewModelState();
 }
 
-class _UserTransactionsState extends State<UserTransactions> {
-  final List<Transaction> _userTransactions = [
+//Handles data changes and updates the view
+class _TransactionViewModelState extends State<TransactionViewModel> {
+  final List<Transaction> transactions = [
     Transaction(
       id: 't1',
       title: 'Neue Gaming Headset',
@@ -31,7 +32,7 @@ class _UserTransactionsState extends State<UserTransactions> {
         amount: txAmount,
         date: DateTime.now());
     setState(() {
-      _userTransactions.add(newTx);
+      transactions.add(newTx);
     });
   }
 
@@ -39,8 +40,8 @@ class _UserTransactionsState extends State<UserTransactions> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        NewTransaction(_addNewTransaction),
-        TransactionList(_userTransactions),
+        NewTransaction(_addNewTransaction), //pointer to function is passed
+        TransactionList(transactions),
       ],
     );
   }
