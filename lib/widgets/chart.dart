@@ -22,10 +22,10 @@ class Chart extends StatelessWidget {
       print(DateFormat.E().format(previousWeekday));
       print(totalSum);
       return {
-        'day': DateFormat.E().format(previousWeekday).substring(0, 1),
+        'day': DateFormat.E().format(previousWeekday).substring(0, 2),
         'amount': totalSum,
       };
-    });
+    }).reversed.toList();
   }
 
   double get totalSpending {
