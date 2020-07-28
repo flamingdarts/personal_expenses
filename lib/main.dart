@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import './widgets/chart.dart';
 import './widgets/new_transactions.dart';
@@ -7,8 +6,6 @@ import 'models/transaction.dart';
 import 'widgets/transaction_list.dart';
 
 void main() {
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 
@@ -61,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
       date: DateTime.now(),
     ), */
   ];
-
+  bool _showChart = false;
   List<Transaction> get recentTransactions {
     return _transactions
         .where((trx) =>
@@ -97,6 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final _appBar = AppBar(
       title: Text('Expenses App'),
       actions: <Widget>[
@@ -105,22 +105,47 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () => _startAddNewTransaction(context)),
       ],
     );
+
     final _occupiedSpace = MediaQuery.of(context).size.height -
         _appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
+
+    final transactionListWidget = Container(
+      height: _occupiedSpace * 0.7,
+      child: TransactionList(_transactions, _deleteTransaction),
+    );
     return Scaffold(
       appBar: _appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              height: _occupiedSpace * 0.3,
-              child: Chart(recentTransactions),
-            ),
-            Container(
-              height: _occupiedSpace * 0.7,
-              child: TransactionList(_transactions, _deleteTransaction),
-            ),
+            if (_isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('show table'),
+                  Switch(
+                      value: _showChart,
+                      onChanged: (switchState) {
+                        setState(() {
+                          _showChart = switchState;
+                        });
+                      }),
+                ],
+              ),
+            if (!_isLandscape)
+              Container(
+                height: _occupiedSpace * 0.3,
+                child: Chart(recentTransactions),
+              ),
+            if (!_isLandscape) transactionListWidget,
+            if (_isLandscape)
+              _showChart
+                  ? Container(
+                      height: _occupiedSpace * 0.7,
+                      child: Chart(recentTransactions),
+                    )
+                  : transactionListWidget,
           ],
         ),
       ),
