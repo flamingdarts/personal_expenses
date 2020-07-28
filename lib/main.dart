@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:personal_expense_app/widgets/new_transactions.dart';
 
+import './widgets/chart.dart';
+import './widgets/new_transactions.dart';
 import 'models/transaction.dart';
 import 'widgets/transaction_list.dart';
 
@@ -41,7 +42,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    Transaction(
+    /* Transaction(
       id: 't1',
       title: 'Neue Gaming Headset',
       amount: 199.90,
@@ -52,8 +53,15 @@ class _MyHomePageState extends State<MyHomePage> {
       title: 'Neue Schuhe',
       amount: 30.99,
       date: DateTime.now(),
-    ),
+    ), */
   ];
+
+  List<Transaction> get recentTransactions {
+    return _transactions
+        .where((trx) =>
+            trx.date.isAfter(DateTime.now().subtract(Duration(days: 7))))
+        .toList();
+  }
 
   void _addNewTransaction(String txTitle, double txAmount) {
     final newTx = Transaction(
@@ -88,14 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text('CHART'),
-                elevation: 5,
-              ),
-            ),
+            Chart(recentTransactions),
             TransactionList(_transactions),
           ],
         ),
