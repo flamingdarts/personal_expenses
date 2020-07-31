@@ -95,6 +95,45 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
+  List<Widget> _buildLandscapeContent(double space, Widget txListWidget) {
+    Widget finalWidget = _showChart
+        ? Container(
+            height: space * 0.7,
+            child: Chart(recentTransactions),
+          )
+        : txListWidget;
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'show table',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Switch.adaptive(
+              activeColor: Theme.of(context).accentColor,
+              value: _showChart,
+              onChanged: (switchState) {
+                setState(() {
+                  _showChart = switchState;
+                });
+              }),
+          finalWidget
+        ],
+      )
+    ];
+  }
+
+  List<Widget> _buildPotraitContent(double space, Widget txListWidget) {
+    return [
+      Container(
+        height: space * 0.3,
+        child: Chart(recentTransactions),
+      ),
+      txListWidget,
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -135,36 +174,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             if (_isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'show table',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Switch.adaptive(
-                      activeColor: Theme.of(context).accentColor,
-                      value: _showChart,
-                      onChanged: (switchState) {
-                        setState(() {
-                          _showChart = switchState;
-                        });
-                      }),
-                ],
-              ),
+              ..._buildLandscapeContent(_occupiedSpace, transactionListWidget),
             if (!_isLandscape)
-              Container(
-                height: _occupiedSpace * 0.3,
-                child: Chart(recentTransactions),
-              ),
-            if (!_isLandscape) transactionListWidget,
-            if (_isLandscape)
-              _showChart
-                  ? Container(
-                      height: _occupiedSpace * 0.7,
-                      child: Chart(recentTransactions),
-                    )
-                  : transactionListWidget,
+              ..._buildPotraitContent(_occupiedSpace,
+                  transactionListWidget), //using spread operator
           ],
         ),
       ),
