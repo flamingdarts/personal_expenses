@@ -102,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final PreferredSizeWidget _appBar = Platform.isIOS
         ? CupertinoNavigationBar(
-            middle: Text('Expenses App'),
+            middle: const Text('Expenses App'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )
         : AppBar(
-            title: Text('Expenses App'),
+            title: const Text('Expenses App'),
             actions: <Widget>[
               IconButton(
                   icon: Icon(Icons.add),
@@ -182,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
             floatingActionButton: Platform.isIOS
                 ? Container()
                 : FloatingActionButton(
-                    child: Icon(Icons.add),
+                    child: const Icon(Icons.add),
                     onPressed: () => _startAddNewTransaction(context)),
           );
   }
